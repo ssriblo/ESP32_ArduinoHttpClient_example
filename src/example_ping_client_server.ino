@@ -1,32 +1,28 @@
 // from https://github.com/arduino-libraries/Ethernet/blob/master/examples/WebServer/WebServer.ino
 
-/*
- Web Server
-
- A simple web server that shows the value of the analog input pins.
- using an Arduino WIZnet Ethernet shield.
-
- Circuit:
- * Ethernet shield attached to pins 10, 11, 12, 13
- * Analog inputs attached to pins A0 through A5 (optional)
-
- created 18 Dec 2009
- by David A. Mellis
- modified 9 Apr 2012
- by Tom Igoe
- modified 02 Sept 2015
- by Arturo Guadalupi
- 
- */
-
 //#include <SPI.h>
-#include <Ethernet.h>
+#include "Ethernet.h"
+#include "UDHttp.h"
+
+///////////////////// SETUP SECTION START //////////////////////////
+#define SPI_CS_PIN        15
+
+// #define USE_HARDCODED_IP  1   /* alternative - IF sets by DHCP */
+#ifndef USE_HARDCODED_IP
+  #define USE_DHCP
+#endif
+
+// Choos only one test ones below!
+#define WEB_CLIENT_TEST   1
+// #define WEB_SERVER_TEST   1
+// #define DOWNLOAD_TEST     1
+
+#define PRINT_WEB_DATA    false  // set to false for better speed measurement
 
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
-byte mac[] = {
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED
-};
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+///////////////////// SETUP SECTION END   //////////////////////////
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
@@ -35,59 +31,9 @@ EthernetServer server(80);
 EthernetClient client;
 unsigned long beginMicros, endMicros;
 unsigned long byteCount = 0;
-bool printWebData = false;  // set to false for better speed measurement
 
-void setup() {
-  // You can use Ethernet.init(pin) to configure the CS pin
-  //Ethernet.init(10);  // Most Arduino shields
-  //Ethernet.init(5);   // MKR ETH Shield
-  //Ethernet.init(0);   // Teensy 2.0
-  //Ethernet.init(20);  // Teensy++ 2.0
-  //Ethernet.init(15);  // ESP8266 with Adafruit FeatherWing Ethernet
-  //Ethernet.init(33);  // ESP32 with Adafruit FeatherWing Ethernet
-  Ethernet.init(15);  // ESP32 with Adafruit FeatherWing Ethernet
-  /*    cs=GPIO15
-        sck=GPIO18
-        miso=GPIO19
-        mosi=GPIO23    */
-
-  // Open serial communications and wait for port to open:
-  Serial.begin(115200);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
-
-  #ifdef USE_DHCP
-  // start the Ethernet connection:
-  Serial.println("Initialize Ethernet with DHCP:");
-  if (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
-    if (Ethernet.hardwareStatus() == EthernetNoHardware) {
-      Serial.println("Ethernet shield was not found.  Sorry, can't run without hardware. :(");
-    } else if (Ethernet.linkStatus() == LinkOFF) {
-      Serial.println("Ethernet cable is not connected.");
-    }
-    // no point in carrying on, so do nothing forevermore:
-    while (true) {
-      delay(1);
-    }
-  }
-#endif // USE_DHCP
-
-  delay(3000);
-
-#define USE_HARDCODED_IP   1
-#ifdef USE_HARDCODED_IP
-  IPAddress ip(192, 168, 1, 60);
-  IPAddress myDns(91, 219, 56, 96); //91.219.56.96  DNS
-  IPAddress gateway(192, 168, 1, 11);
-  IPAddress subnet(255, 255, 255, 0);  
-  Serial.println("Ethernet WebServer Example");
-  // start the Ethernet connection and the server:
-  // Ethernet.begin(mac, ip);
-  Ethernet.begin(mac, ip, myDns, gateway, subnet);
-
-  // Check for Ethernet hardware present
+///////////////////////////////////////////////////////////////////////////////
+void ethCheck(EthernetClass Ethernet){
   if (Ethernet.hardwareStatus() == EthernetNoHardware) {
     Serial.println("Ethernet shield was not found.  Sorry, can't run without hardware. :(");
     while (true) {
@@ -97,8 +43,6 @@ void setup() {
   if (Ethernet.linkStatus() == LinkOFF) {
     Serial.println("Ethernet cable is not connected.");
   }
-#endif  
-
   Serial.print("My IP address: ");
   Serial.println(Ethernet.localIP());
   Serial.print("My IP dnsServerIP: ");
@@ -107,11 +51,69 @@ void setup() {
   Serial.println(Ethernet.gatewayIP());
   Serial.print("My subnetMask: ");
   Serial.println(Ethernet.subnetMask());
+}
 
-#define WEB_CLIENT_TEST  1
+///////////////////////////////////////////////////////////////////////////////
+int wdataf(uint8_t *buffer, int len){
+  for(int i=0; i<len; i++){
+    Serial.print(buffer[i], HEX);
+    Serial.print(" ");
+  }
+  Serial.println();
+  printf("write end");
+  return len;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void progressf(int percent){
+  Serial.printf("progressf = %d\n", percent);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+void setup() {
+  // You can use Ethernet.init(pin) to configure the CS pin
+  // Ethernet.init(SPI_CS_PIN);
+  /*    SPI default configured as VSPI=SPI3
+        cs=GPIO15 (see .init(15) above
+        sck=GPIO18
+        miso=GPIO19
+        mosi=GPIO23    */
+
+	int8_t sck = 18;
+	int8_t miso = 19;
+	int8_t mosi = 23;
+	int8_t ss = 15;
+  
+  // Open serial communications and wait for port to open:
+  Serial.begin(115200);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+  delay(500);
+  Ethernet.init_spi_pins(sck, miso, mosi, ss);
+
+  #ifdef USE_DHCP
+  // start the Ethernet connection:
+  Serial.println("Initialize Ethernet with DHCP:");
+  Ethernet.begin(mac);
+  ethCheck(Ethernet);
+#endif // USE_DHCP
+
+  delay(1000);
+
+#ifdef USE_HARDCODED_IP
+  Serial.println("Initialize Ethernet hardcoded ip, dns, gw, mask");
+  IPAddress ip(192, 168, 1, 60);
+  IPAddress myDns(91, 219, 56, 96); //91.219.56.96  DNS
+  IPAddress gateway(192, 168, 1, 11);
+  IPAddress subnet(255, 255, 255, 0);  
+  Ethernet.begin(mac, ip, myDns, gateway, subnet);
+  ethCheck(Ethernet);
+#endif  
+
 #ifdef WEB_CLIENT_TEST
   Serial.println("Ethernet WebClient Example");
-  //IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
+  //IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS). Adjust for your cunnet site ip
   char server[] = "www.google.com";    // name address for Google (using DNS)
   
   // if you get a connection, report back via serial:
@@ -125,13 +127,23 @@ void setup() {
     client.println();
   } else {
     // if you didn't get a connection to the server:
-    Serial.println("connection failed");
+    Serial.println("connection failed"); 
   }
-#endif // WEB_CLIENT_TEST
+#endif // WEB_CLIENT_TEST 
+
+#ifdef DOWNLOAD_TEST
+    char *downloadUrl = "http://192.168.1.33:8000/test.txt";
+    UDHttp udh;
+    int r = udh.download(client, downloadUrl, wdataf, progressf);
+    if(r == -1)
+    {
+      Serial.println("error");
+    }
+#endif // DOWNLOAD_TEST
 
 }
 
-
+///////////////////////////////////////////////////////////////////////////////
 void loop() {
 #ifdef WEB_CLIENT_TEST
   // if there are incoming bytes available
@@ -141,7 +153,7 @@ void loop() {
     byte buffer[80];
     if (len > 80) len = 80;
     client.read(buffer, len);
-    if (printWebData) {
+    if (PRINT_WEB_DATA) {
       Serial.write(buffer, len); // show in the serial monitor (slows some boards)
     }
     byteCount = byteCount + len;

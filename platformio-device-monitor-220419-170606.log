@@ -1,0 +1,34 @@
+17:06:07.843 > ets Jun  8 2016 00:22:57
+17:06:07.846 > 
+17:06:07.846 > rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+17:06:07.850 > configsip: 0, SPIWP:0xee
+17:06:07.852 > clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+17:06:07.859 > mode:DIO, clock div:2
+17:06:07.861 > load:0x3fff0018,len:4
+17:06:07.863 > load:0x3fff001c,len:1044
+17:06:07.865 > load:0x40078000,len:10124
+17:06:07.867 > load:0x40080400,len:5828
+17:06:07.870 > entry 0x400806a8
+17:06:08.507 > Initialize Ethernet with DHCP:
+17:06:09.068 > sck miso mosi ss
+17:06:09.071 > 17
+17:06:09.071 > 19
+17:06:09.071 > 23
+17:06:09.071 > 15
+17:06:25.320 > ets Jun  8 2016 00:22:57
+17:06:25.321 > 
+17:06:25.321 > rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+17:06:25.325 > configsip: 0, SPIWP:0xee
+17:06:25.328 > clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+17:06:25.336 > mode:DIO, clock div:2
+17:06:25.336 > load:0x3fff0018,len:4
+17:06:25.339 > load:0x3fff001c,len:1044
+17:06:25.341 > load:0x40078000,len:10124
+17:06:25.345 > load:0x40080400,len:5828
+17:06:25.345 > entry 0x400806a8
+17:06:25.985 > Initialize Ethernet with DHCP:
+17:06:26.542 > sck miso mosi ss
+17:06:26.545 > 17
+17:06:26.545 > 19
+17:06:26.545 > 23
+17:06:26.547 > 15

@@ -1,0 +1,21 @@
+16:59:25.906 > ets Jun  8 2016 00:22:57
+16:59:25.909 > 
+16:59:25.909 > rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+16:59:25.913 > configsip: 0, SPIWP:0xee
+16:59:25.916 > clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+16:59:25.922 > mode:DIO, clock div:2
+16:59:25.924 > load:0x3fff0018,len:4
+16:59:25.926 > load:0x3fff001c,len:1044
+16:59:25.928 > load:0x40078000,len:10124
+16:59:25.930 > load:0x40080400,len:5828
+16:59:25.933 > entry 0x400806a8
+16:59:26.571 > Initialize Ethernet with DHCP:
+16:59:27.257 > My IP address: 192.168.1.33
+16:59:27.260 > My IP dnsServerIP: 91.219.56.96
+16:59:27.262 > My IP gatewayIP: 192.168.1.11
+16:59:27.265 > My subnetMask: 255.255.255.0
+16:59:28.257 > Ethernet WebClient Example
+16:59:28.539 > connected to 74.125.131.99
+16:59:32.203 > 
+16:59:32.205 > disconnecting.
+16:59:32.228 > Received 246660 bytes in 6.1659, rate = 40.00 kbytes/second

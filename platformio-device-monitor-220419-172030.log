@@ -1,0 +1,44 @@
+17:20:32.241 > ets Jun  8 2016 00:22:57
+17:20:32.245 > 
+17:20:32.245 > rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+17:20:32.248 > configsip: 0, SPIWP:0xee
+17:20:32.251 > clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+17:20:32.257 > mode:DIO, clock div:2
+17:20:32.259 > load:0x3fff0018,len:4
+17:20:32.261 > load:0x3fff001c,len:1044
+17:20:32.263 > load:0x40078000,len:10124
+17:20:32.265 > load:0x40080400,len:5828
+17:20:32.268 > entry 0x400806a8
+17:20:32.905 > Initialize Ethernet with DHCP:
+17:20:33.464 > sck miso mosi ss
+17:20:33.468 > 18
+17:20:33.468 > 16
+17:20:33.468 > 23
+17:20:33.468 > 15
+17:20:33.468 > Ethernet shield was not found.  Sorry, can't run without hardware. :(
+17:21:04.929 > ets Jun  8 2016 00:22:57
+17:21:04.932 > 
+17:21:04.932 > rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+17:21:04.936 > configsip: 0, SPIWP:0xee
+17:21:04.939 > clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+17:21:04.945 > mode:DIO, clock div:2
+17:21:04.947 > load:0x3fff0018,len:4
+17:21:04.948 > load:0x3fff001c,len:1044
+17:21:04.951 > load:0x40078000,len:10124
+17:21:04.953 > load:0x40080400,len:5828
+17:21:04.955 > entry 0x400806a8
+17:21:05.594 > Initialize Ethernet with DHCP:
+17:21:06.154 > sck miso mosi ss
+17:21:06.156 > 18
+17:21:06.157 > 16
+17:21:06.157 > 23
+17:21:06.157 > 15
+17:21:06.258 > My IP address: 192.168.1.33
+17:21:06.263 > My IP dnsServerIP: 91.219.56.96
+17:21:06.264 > My IP gatewayIP: 192.168.1.11
+17:21:06.267 > My subnetMask: 255.255.255.0
+17:21:07.260 > Ethernet WebClient Example
+17:21:07.339 > connected to 173.194.222.105
+17:21:11.109 > 
+17:21:11.111 > disconnecting.
+17:21:11.132 > Received 246447 bytes in 6.0491, rate = 40.74 kbytes/second
